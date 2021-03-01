@@ -1,13 +1,13 @@
 function factorial(n) {
-  let x = 1;
+  let factorialValue = 1;
 
   if (n <= 1) {
-    return x;
-  } else {
-    while (n > 1) {
-      x = x * n;
-      n = n - 1;
-    }
-    return x;
+    return factorialValue;
   }
+  while (n > 1) {
+    factorialValue *= n;
+    n -= 1;
+  }
+  return factorialValue;
+
 }
