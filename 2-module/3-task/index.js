@@ -1,4 +1,6 @@
 let calculator = {
+  firstNumber: null,
+  secondNumber: null,
   read(a, b) {
     this.firstNumber = a;
     this.secondNumber = b;
