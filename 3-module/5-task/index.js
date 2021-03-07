@@ -1,11 +1,11 @@
 function getMinMax(str) {
-  let outOfSpaces = str.split(' ').join();
-  let arrayItem = outOfSpaces.split(',');
-  let allNumbers = arrayItem
+  const outOfSpaces = str.split(' ').join();
+  const arrayItem = outOfSpaces.split(',');
+  const allNumbers = arrayItem
     .filter((item) => item !== '' && isFinite(item));
 
-  let max = Math.max(...allNumbers);
-  let min = Math.min(...allNumbers);
+  const max = Math.max(...allNumbers);
+  const min = Math.min(...allNumbers);
 
   return {min, max};
 }
