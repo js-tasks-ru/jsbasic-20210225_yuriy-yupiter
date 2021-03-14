@@ -1,6 +1,6 @@
 function highlight(table) {
   for (let i = 1; i < table.rows.length; i++) {
-    let row = table.rows[i];
+    const row = table.rows[i];
     if (row.cells[3].dataset.available === "true") {
       row.classList.add('available');
     } else if (row.cells[3].dataset.available === "false") {

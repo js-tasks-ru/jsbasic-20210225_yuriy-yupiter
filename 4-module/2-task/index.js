@@ -1,6 +1,6 @@
 function makeDiagonalRed(table) {
-  for (let i = 0; i < table.rows.length; i++) {
-    let row = table.rows[i];
+  [...table.rows].forEach( (row, i) => {
+    console.log(row);
     row.cells[i].style.backgroundColor = 'red';
-  }
+  });
 }
