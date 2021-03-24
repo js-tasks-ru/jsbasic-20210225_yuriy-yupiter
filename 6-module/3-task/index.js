@@ -1,78 +1,53 @@
 import createElement from '../../assets/lib/create-element.js';
 
 export default class Carousel {
+
   constructor(slides) {
     this.slides = slides;
-    this.elem = document.createElement('div');
-    this.elem.classList.add('carousel');
 
-    this.arrowRight = document.createElement('div');
-    this.arrowRight.classList.add('carousel__arrow', 'carousel__arrow_right');
-    this.elem.append(this.arrowRight);
-    this.imageArrowRight = document.createElement('img');
-    this.imageArrowRight.setAttribute('src', '/assets/images/icons/angle-icon.svg');
-    this.imageArrowRight.setAttribute('alt', 'icon');
-
-    this.arrowRight.append(this.imageArrowRight);
-    this.arrowLeft = document.createElement('div');
-    this.arrowLeft.classList.add('carousel__arrow', 'carousel__arrow_left');
-    this.elem.append(this.arrowLeft);
-    this.imageArrowLeft = document.createElement('img');
-    this.imageArrowLeft.setAttribute('src', '/assets/images/icons/angle-left-icon.svg');
-    this.imageArrowLeft.setAttribute('alt', 'icon');
-
-    this.arrowLeft.append(this.imageArrowLeft);
-
-    this.inner = document.createElement('div');
-    this.inner.classList.add('carousel__inner');
-    this.elem.append(this.inner);
-
-    this.carousel = this.slides.map(slide => {
-      this.slide = slide;
-      this.slideDiv = document.createElement('div');
-      this.slideDiv.classList.add('carousel__slide');
-      this.slideDiv.setAttribute('data-id', this.slide.id);
-
-      this.image = document.createElement('img');
-      this.image.setAttribute('src', `/assets/images/carousel/${this.slide.image}`);
-      this.slideDiv.append(this.image);
-      this.inner.append(this.slideDiv);
-
-      this.caption = document.createElement('div');
-      this.caption.classList.add('carousel__caption');
-      this.slideDiv.append(this.caption);
-
-      this.price = document.createElement('span');
-      this.price.append(`€${this.slide.price.toFixed(2)}`);
-      this.price.classList.add('carousel__price');
-      this.caption.append(this.price);
-
-      this.title = document.createElement('div');
-      this.title.classList.add('carousel__title');
-      this.title.append(this.slide.name);
-      this.caption.append(this.title);
-
-      this.button = document.createElement('button');
-      this.button.setAttribute('type', 'button');
-      this.button.classList.add('carousel__button');
-      this.caption.append(this.button);
-      this.icon = document.createElement('img');
-      this.icon.setAttribute('src', '/assets/images/icons/plus-icon.svg');
-      this.icon.setAttribute('alt', 'icon');
-      this.button.append(this.icon);
-      this.currentSlideNumber = 0;
-
-    })
-
-    this.initCarousel();
+    this.currentSlideNumber = 0;
+    this.render();
+    this.addEventListeners();
   }
-  initCarousel() {
 
-    let slidesAmount = this.slides.length;
+  render() {
+    this.elem = createElement(`
+        <div class="carousel">
+          <div class="carousel__arrow carousel__arrow_right">
+            <img src="/assets/images/icons/angle-icon.svg" alt="icon" />
+          </div>
+          <div class="carousel__arrow carousel__arrow_left">
+            <img src="/assets/images/icons/angle-left-icon.svg" alt="icon" />
+          </div>
+          <div class="carousel__inner"></div>
+        </div>
+        `);
 
+    let slides = this.slides.map(item => createElement(`
+      <div class="carousel__slide" data-id="${item.id}">
+        <img
+          src="/assets/images/carousel/${item.image}"
+          class="carousel__img"
+          alt="slide"
+        />
+        <div class="carousel__caption">
+          <span class="carousel__price">€${item.price.toFixed(2)}</span>
+          <div class="carousel__title">${item.name}</div>
+          <button type="button" class="carousel__button">
+            <img src="/assets/images/icons/plus-icon.svg" alt="icon" />
+          </button>
+        </div>
+      </div>`));
+
+    this.sub('inner').append(...slides);
+
+    this.update();
+  }
+
+  addEventListeners() {
     this.elem.onclick = ({target}) => {
-      let buttonPlus = target.closest('.carousel__button');
-      if (buttonPlus) {
+      let button = target.closest('.carousel__button');
+      if (button) {
         let id = target.closest('[data-id]').dataset.id;
 
         this.elem.dispatchEvent(new CustomEvent('product-add', {
@@ -81,40 +56,45 @@ export default class Carousel {
         }));
       }
 
-
       if (target.closest('.carousel__arrow_right')) {
-        next();
+        this.next();
       }
 
       if (target.closest('.carousel__arrow_left')) {
-        prev();
+        this.prev();
       }
     };
-
-    let next = () => {
-      this.currentSlideNumber++;
-      update();
-    }
-
-    let prev = () => {
-      this.currentSlideNumber--;
-      update();
-    }
-
-    let update = () => {
-      let offset = -this.inner.offsetWidth * this.currentSlideNumber;
-      this.inner.style.transform = `translateX(${offset}px)`;
-      if (this.currentSlideNumber === slidesAmount - 1) {
-        this.arrowRight.style.display = 'none';
-      } else {
-        this.arrowRight.style.display = '';
-      }
-      if (this.currentSlideNumber === 0) {
-        this.arrowLeft.style.display = 'none';
-      } else {
-        this.arrowLeft.style.display = '';
-      }
-    }
-    update();
   }
+
+  sub(ref) {
+    return this.elem.querySelector(`.carousel__${ref}`);
+  }
+
+  next() {
+    this.currentSlideNumber++;
+    this.update();
+  }
+
+  prev() {
+    this.currentSlideNumber--;
+    this.update();
+  }
+
+  update() {
+    let offset = -this.elem.offsetWidth * this.currentSlideNumber;
+    this.sub('inner').style.transform = `translateX(${offset}px)`;
+
+    if (this.currentSlideNumber == this.slides.length - 1) {
+      this.sub('arrow_right').style.display = 'none';
+    } else {
+      this.sub('arrow_right').style.display = '';
+    }
+
+    if (this.currentSlideNumber == 0) {
+      this.sub('arrow_left').style.display = 'none';
+    } else {
+      this.sub('arrow_left').style.display = '';
+    }
+  }
+
 }
