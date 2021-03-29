@@ -20,12 +20,12 @@ export default class UserTable {
     this.addEventListener();
   }
 
-  userTableTemplate = (arrayOfUsers) => {
+  userTableTemplate = ({arrayOfUsers}) => {
     return `
             <table>
               ${this.headerTableTemplate()}
               <tbody>
-                  ${this.bodyTableTemplate(arrayOfUsers)}
+                  ${this.bodyTableTemplate({arrayOfUsers})}
               </tbody>
             </table>
           `;
@@ -45,7 +45,7 @@ export default class UserTable {
           `;
   }
 
-  bodyTableTemplate(arrayOfUsers) {
+  bodyTableTemplate({arrayOfUsers}) {
     let tableInner = arrayOfUsers.map(user => {
       let cellsWithData = Object.values(user)
         .map(value => `<td>${value}</td>`)
@@ -61,7 +61,7 @@ export default class UserTable {
   }
 
   render() {
-    const template = this.userTableTemplate(this.users);
+    const template = this.userTableTemplate({arrayOfUsers: this.users});
     this.elem.innerHTML = template;
   }
 
