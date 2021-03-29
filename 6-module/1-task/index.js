@@ -13,51 +13,67 @@
  *
  */
 export default class UserTable {
-  constructor(rows) {
+  constructor(users) {
     this.elem = document.createElement('table');
+    this.users = users;
+    this.render();
+    this.addEventListener();
+  }
 
-    this.elem.innerHTML = `
-      <thead>
-          <tr>
-            <th>Имя</th>
-            <th>Возраст</th>
-            <th>Зарплата</th>
-            <th>Город</th>
-            <th></th>
-          </tr>
-      </thead>
-    `;
+  userTableTemplate = (arrayOfUsers) => {
+    return `
+            <table>
+              ${this.headerTableTemplate()}
+              <tbody>
+                  ${this.bodyTableTemplate(arrayOfUsers)}
+              </tbody>
+            </table>
+          `;
+  }
 
-    let tableInner = rows.map(row => {
-      let cellsWithData = Object.values(row)
+  headerTableTemplate() {
+    return `
+            <thead>
+                <tr>
+                  <th>Имя</th>
+                  <th>Возраст</th>
+                  <th>Зарплата</th>
+                  <th>Город</th>
+                  <th></th>
+                </tr>
+            </thead>
+          `;
+  }
+
+  bodyTableTemplate(arrayOfUsers) {
+    let tableInner = arrayOfUsers.map(user => {
+      let cellsWithData = Object.values(user)
         .map(value => `<td>${value}</td>`)
         .join('');
-
       return `
           <tr>
             ${cellsWithData}
-            <td><button>X</button></td>
+            <td><button data-action="remove">X</button></td>
           </tr>
         `;
     }).join('');
+    return `${tableInner}`;
+  }
 
-    this.elem.innerHTML += `
-      <tbody>
-        ${tableInner}
-      <tbody>
-    `;
+  render() {
+    const template = this.userTableTemplate(this.users);
+    this.elem.innerHTML = template;
+  }
 
+  addEventListener() {
     this.elem.addEventListener('click', (event) => this.onClick(event));
   }
 
   onClick({target}) {
-    if (target.tagName !== 'BUTTON') {
+    if (target.dataset.action !== 'remove') {
       return;
     }
-
     let tr = target.closest('tr');
-
     tr.remove();
   }
-
 }

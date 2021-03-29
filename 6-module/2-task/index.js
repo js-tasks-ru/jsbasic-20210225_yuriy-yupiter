@@ -29,7 +29,6 @@ export default class ProductCard {
   addEventListeners() {
     this.buttonEvent = this.elem.querySelector('.card__button')
     this.buttonEvent.onclick = (event) => this.onClick(event);
-    console.log('event:', event);
   }
 
   onClick(event) {
@@ -37,6 +36,5 @@ export default class ProductCard {
       detail: this.product.id,
       bubbles: true
     }));
-    console.log('event:', event);
   }
 }
