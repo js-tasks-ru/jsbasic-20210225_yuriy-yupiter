@@ -28,10 +28,10 @@ export default class ProductCard {
 
   addEventListeners() {
     this.buttonEvent = this.elem.querySelector('.card__button')
-    this.buttonEvent.onclick = (event) => this.onClick(event);
+    this.buttonEvent.onclick = this.onClick;
   }
 
-  onClick(event) {
+  onClick = () => {
     this.buttonEvent.dispatchEvent(new CustomEvent("product-add", {
       detail: this.product.id,
       bubbles: true

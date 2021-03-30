@@ -16,19 +16,17 @@ export default class UserTable {
   constructor(users) {
     this.elem = document.createElement('table');
     this.users = users;
-    this.render();
+    this._render();
     this.addEventListener();
   }
 
   userTableTemplate = ({arrayOfUsers}) => {
     return `
-            <table>
-              ${this.headerTableTemplate()}
-              <tbody>
-                  ${this.bodyTableTemplate({arrayOfUsers})}
-              </tbody>
-            </table>
-          `;
+            ${this.headerTableTemplate()}
+            <tbody>
+                ${this.bodyTableTemplate({arrayOfUsers})}
+            </tbody>
+            `;
   }
 
   headerTableTemplate() {
@@ -60,16 +58,15 @@ export default class UserTable {
     return `${tableInner}`;
   }
 
-  render() {
-    const template = this.userTableTemplate({arrayOfUsers: this.users});
-    this.elem.innerHTML = template;
+  _render() {
+    this.elem.innerHTML = this.userTableTemplate({arrayOfUsers: this.users});
   }
 
   addEventListener() {
-    this.elem.addEventListener('click', (event) => this.onClick(event));
+    this.elem.addEventListener('click', this.onClick);
   }
 
-  onClick({target}) {
+  onClick = ({target}) => {
     if (target.dataset.action !== 'remove') {
       return;
     }

@@ -19,11 +19,16 @@ export default class Carousel {
           <div class="carousel__arrow carousel__arrow_left">
             <img src="/assets/images/icons/angle-left-icon.svg" alt="icon" />
           </div>
-          <div class="carousel__inner"></div>
+          <div class="carousel__inner">
+            ${this.slidesTemplate({ slides: this.slides })}
+          </div>
         </div>
         `);
+    this.update();
+  }
 
-    let slides = this.slides.map(item => createElement(`
+  slidesTemplate({ slides }) {
+    let slidesInner = slides.map(item => `
       <div class="carousel__slide" data-id="${item.id}">
         <img
           src="/assets/images/carousel/${item.image}"
@@ -37,33 +42,32 @@ export default class Carousel {
             <img src="/assets/images/icons/plus-icon.svg" alt="icon" />
           </button>
         </div>
-      </div>`));
-
-    this.sub('inner').append(...slides);
-
-    this.update();
+      </div>`).join('');
+    return `${slidesInner}`;
   }
 
   addEventListeners() {
-    this.elem.onclick = ({target}) => {
-      let button = target.closest('.carousel__button');
-      if (button) {
-        let id = target.closest('[data-id]').dataset.id;
+    this.elem.onclick = this.onContainerClick;
+  }
 
-        this.elem.dispatchEvent(new CustomEvent('product-add', {
-          detail: id,
-          bubbles: true
-        }));
-      }
-
-      if (target.closest('.carousel__arrow_right')) {
-        this.next();
-      }
-
-      if (target.closest('.carousel__arrow_left')) {
-        this.prev();
-      }
-    };
+  onContainerClick = ({target}) => {
+    let buttonPlus = target.closest('.carousel__button');
+    if (buttonPlus) {
+      let id = target.closest('[data-id]').dataset.id;
+      this.elem.dispatchEvent(new CustomEvent('product-add', {
+        detail: id,
+        bubbles: true
+      }));
+      return;
+    }
+    if (target.closest('.carousel__arrow_right')) {
+      this.next();
+      return;
+    }
+    if (target.closest('.carousel__arrow_left')) {
+      this.prev();
+      return;
+    }
   }
 
   sub(ref) {
