@@ -55,7 +55,7 @@ export default class UserTable {
           </tr>
         `;
     }).join('');
-    return `${tableInner}`;
+    return tableInner;
   }
 
   _render() {

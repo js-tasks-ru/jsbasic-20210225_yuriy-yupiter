@@ -43,7 +43,7 @@ export default class Carousel {
           </button>
         </div>
       </div>`).join('');
-    return `${slidesInner}`;
+    return slidesInner;
   }
 
   addEventListeners() {
