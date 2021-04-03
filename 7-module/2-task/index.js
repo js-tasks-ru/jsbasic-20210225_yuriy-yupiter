@@ -4,7 +4,7 @@ export default class Modal {
   constructor() {
     this.render();
 
-    this.elem.addEventListener('click', this.onClick);
+    this.elem.addEventListener('click', this.#onClick);
   }
 
   render() {
@@ -32,18 +32,18 @@ export default class Modal {
     document.body.append(this.elem);
     document.body.classList.add('is-modal-open');
 
-    this.keydownEventListener = this.onKeyDownEscape;
+    this.keydownEventListener = this.#onKeyDownEscape;
     document.addEventListener('keydown', this.keydownEventListener);
   }
 
-  onClick = (event) => {
+  #onClick = (event) => {
     if (event.target.closest('.modal__close')) {
       event.preventDefault();
       this.close();
     }
   }
 
-  onKeyDownEscape = (event) => {
+  #onKeyDownEscape = (event) => {
     if (event.code === 'Escape') {
       event.preventDefault();
       this.close();

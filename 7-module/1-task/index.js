@@ -6,7 +6,6 @@ export default class RibbonMenu {
 
     this.render();
     this.addEventListeners();
-    this.value = '';
   }
 
   render() {
@@ -67,11 +66,9 @@ export default class RibbonMenu {
 
     itemElem.classList.add('ribbon__item_active');
 
-    this.value = itemElem.dataset.id;
-
     this.elem.dispatchEvent(
       new CustomEvent('ribbon-select', {
-        detail: this.value,
+        detail: itemElem.dataset.id,
         bubbles: true,
       })
     );
