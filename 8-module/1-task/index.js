@@ -46,13 +46,14 @@ export default class CartIcon {
       this.initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset;
     }
 
+    if (document.documentElement.clientWidth <= 767) {
+      this.initialPosition();
+      return;
+    }
+
     if (window.pageYOffset > this.initialTopCoord) {
       this.fixedPosition();
     } else {
-      this.initialPosition();
-    }
-
-    if (document.documentElement.clientWidth <= 767) {
       this.initialPosition();
     }
 

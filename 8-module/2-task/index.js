@@ -38,7 +38,7 @@ export default class ProductGrid {
   }
 
   updateFilter(filters) {
-    Object.assign(this.filters, filters);
+    this.filters = {...this.filters, ...filters};
     this.renderContent();
   }
 

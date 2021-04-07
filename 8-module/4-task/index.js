@@ -121,7 +121,7 @@ export default class Cart {
 
     this.modalBody.addEventListener("click", this.onModalBodyClick);
 
-    this.modalBody.querySelector("form").onsubmit = (event) => this.onSubmit(event);
+    this.modalBody.querySelector("form").onsubmit = this.onSubmit;
 
     this.modal.setBody(this.modalBody);
 
@@ -168,7 +168,7 @@ export default class Cart {
     this.modalBody.querySelector(`.cart-buttons__info-price`).innerHTML = '€' + this.getTotalPrice().toFixed(2);
   }
 
-  async onSubmit(event) {
+  onSubmit = async (event) => {
     event.preventDefault();
 
     this.modalBody
@@ -192,7 +192,7 @@ export default class Cart {
         <p>
           Order successful! Your order is being cooked :) <br>
           We’ll notify you about delivery time shortly.<br>
-          <img src="../assets/images/delivery.gif">
+          <img src="/assets/images/delivery.gif">
         </p>
       </div>
       `;
